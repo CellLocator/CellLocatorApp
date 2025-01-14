@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CellTower
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,9 +44,9 @@ class MainActivity : ComponentActivity() {
 }
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
-    data object Info : Screen("cellinfo", R.string.app_name, Icons.Rounded.Info)
+    data object Info : Screen("cellinfo", R.string.menu_cells, Icons.Rounded.CellTower)
 
-    data object Tweaks : Screen("settings", R.string.app_name, Icons.Rounded.Settings)
+    data object Tweaks : Screen("settings", R.string.menu_settings, Icons.Rounded.Settings)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
