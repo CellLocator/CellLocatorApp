@@ -20,4 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "CellLocator"
-include(":app")
+include(":app", ":netmonster-core")
+project(":netmonster-core").projectDir = file("libs/netmonster-core/library")

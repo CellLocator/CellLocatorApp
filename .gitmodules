@@ -1,0 +1,3 @@
+[submodule "libs/netmonster-core"]
+	path = libs/netmonster-core
+	url = https://github.com/CellLocator/netmonster-core
