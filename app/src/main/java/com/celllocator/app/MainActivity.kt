@@ -90,9 +90,7 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
     CellLocatorTheme {
         LaunchedEffect(Unit) {
             permissionsGranted = checkAndRequestPermissions()
-            if (!permissionsGranted) {
-                showPermissionDialog = true
-            }
+            showPermissionDialog = !permissionsGranted
         }
 
         if (showPermissionDialog) {
