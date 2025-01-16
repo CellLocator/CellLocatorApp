@@ -96,21 +96,21 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
         if (showPermissionDialog) {
             AlertDialog(
                 onDismissRequest = {},
-                title = { R.string.permission_required },
-                text = { R.string.permission_required_text },
+                title = { Text(text = stringResource(R.string.permission_required)) },
+                text = { Text(text = stringResource(R.string.permission_required_text)) },
                 confirmButton = {
                     TextButton(onClick = {
                         permissionsGranted = checkAndRequestPermissions()
                         showPermissionDialog = !permissionsGranted
                     }) {
-                        Text("Grant Permissions")
+                        Text(text = stringResource(R.string.grant_permissions))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = {
                         showPermissionDialog = false
                     }) {
-                        R.string.cancel
+                        Text(text = stringResource(R.string.cancel))
                     }
                 }
             )
@@ -193,14 +193,14 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
                         contentAlignment = Alignment.Center
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("Permissions Required")
+                            Text(stringResource(R.string.permission_required))
                             Button(onClick = {
                                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                                 val uri = Uri.fromParts("package", context.packageName, null)
                                 intent.data = uri
                                 context.startActivity(intent)
                             }) {
-                                R.string.open_settings
+                                Text(stringResource(R.string.open_settings))
                             }
                         }
                     }
