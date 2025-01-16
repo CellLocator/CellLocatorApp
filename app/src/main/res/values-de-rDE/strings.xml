@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CellLocator</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_cells">Zellen</string>
+    <string name="permission_required">Berechtigungen benötigt</string>
+    <string name="permission_required_text">Damit diese App ordnungsgemäß funktioniert, sind Standort- und Telefonstatusberechtigungen erforderlich.</string>
+    <string name="cancel">Abbrechen</string>
+</resources>

@@ -96,8 +96,8 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
         if (showPermissionDialog) {
             AlertDialog(
                 onDismissRequest = {},
-                title = { Text("Permissions Required") },
-                text = { Text("This app requires location and phone state permissions to function properly.") },
+                title = { R.string.permission_required },
+                text = { R.string.permission_required_text },
                 confirmButton = {
                     TextButton(onClick = {
                         permissionsGranted = checkAndRequestPermissions()
@@ -110,7 +110,7 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
                     TextButton(onClick = {
                         showPermissionDialog = false
                     }) {
-                        Text("Cancel")
+                        R.string.cancel
                     }
                 }
             )
