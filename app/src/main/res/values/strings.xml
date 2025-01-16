@@ -5,4 +5,5 @@
     <string name="permission_required">Permission required</string>
     <string name="permission_required_text">This app requires location and phone state permissions to function properly.</string>
     <string name="cancel">Cancel</string>
+    <string name="open_settings">Open Settings</string>
 </resources>

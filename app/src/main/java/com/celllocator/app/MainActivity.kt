@@ -200,7 +200,7 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
                                 intent.data = uri
                                 context.startActivity(intent)
                             }) {
-                                Text("Open Settings")
+                                R.string.open_settings
                             }
                         }
                     }

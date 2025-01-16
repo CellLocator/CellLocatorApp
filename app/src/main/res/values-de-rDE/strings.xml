@@ -6,4 +6,5 @@
     <string name="permission_required">Berechtigungen benötigt</string>
     <string name="permission_required_text">Damit diese App ordnungsgemäß funktioniert, sind Standort- und Telefonstatusberechtigungen erforderlich.</string>
     <string name="cancel">Abbrechen</string>
+    <string name="open_settings">Einstellungen öffnen</string>
 </resources>
