@@ -7,7 +7,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CellTower
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -80,7 +79,8 @@ fun MainActivityContent() {
             },
             content = { padding ->
                 Surface(
-                    modifier = Modifier.padding(padding), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.padding(padding),
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     NavHost(
                         navController = navController,
@@ -104,7 +104,10 @@ fun MainActivityContent() {
                     navItems.forEach { screen ->
                         NavigationBarItem(
                             icon = {
-                                Icon(screen.icon, contentDescription = stringResource(id = screen.resourceId))
+                                Icon(
+                                    screen.icon,
+                                    contentDescription = stringResource(id = screen.resourceId)
+                                )
                             },
                             label = { Text(stringResource(id = screen.resourceId)) },
                             selected =
