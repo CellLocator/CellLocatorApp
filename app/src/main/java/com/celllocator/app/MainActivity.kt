@@ -44,9 +44,9 @@ class MainActivity : ComponentActivity() {
 }
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
-    data object Info : Screen("cellinfo", R.string.menu_cells, Icons.Rounded.CellTower)
+    data object Cells : Screen("cellinfo", R.string.menu_cells, Icons.Rounded.CellTower)
 
-    data object Tweaks : Screen("settings", R.string.menu_settings, Icons.Rounded.Settings)
+    data object Settings : Screen("settings", R.string.menu_settings, Icons.Rounded.Settings)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +55,7 @@ fun MainActivityContent() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val navController = rememberNavController()
 
-    val navItems = listOf(Screen.Info, Screen.Tweaks)
+    val navItems = listOf(Screen.Cells, Screen.Settings)
 
     CellLocatorTheme {
         Scaffold(
@@ -84,13 +84,13 @@ fun MainActivityContent() {
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Info.route,
+                        startDestination = Screen.Cells.route,
                     ) {
                         // placeholder for the screens
-                        composable(Screen.Info.route) {
+                        composable(Screen.Cells.route) {
                             Text("Info")
                         }
-                        composable(Screen.Tweaks.route) {
+                        composable(Screen.Settings.route) {
                             Text("Settings")
                         }
                     }
