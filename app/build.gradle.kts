@@ -1,7 +1,27 @@
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
+
+fun getBuildNumber(): Int {
+    val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    val currentDate = LocalDate.now()
+    val currentDateTime = LocalDateTime.now()
+    val secondsSinceMidnight = Duration.between(
+        currentDateTime.toLocalDate().atStartOfDay(),
+        currentDateTime
+    ).seconds
+    val twoDigitSuffix = ((secondsSinceMidnight / 86400.0) * 99).toInt().coerceIn(0, 99)
+    val formattedDate = currentDate.format(dateFormatter)
+    val buildNumber = "$formattedDate${"%02d".format(twoDigitSuffix)}".toInt()
+    return buildNumber
+}
+
 
 android {
     namespace = "com.celllocator.app"
@@ -18,8 +38,8 @@ android {
         applicationId = "com.celllocator.app"
         minSdk = 31
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = getBuildNumber()
+        versionName = "0.0-DEV"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
