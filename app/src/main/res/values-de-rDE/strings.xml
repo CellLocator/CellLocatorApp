@@ -7,4 +7,6 @@
     <string name="permission_required_text">Damit diese App ordnungsgemäß funktioniert, sind Standort- und Telefonstatusberechtigungen erforderlich.</string>
     <string name="cancel">Abbrechen</string>
     <string name="open_settings">Einstellungen öffnen</string>
+    <string name="grant_permissions">Berechtigungen erlauben</string>
+    <string name="checking_permissions">Prüfe Berechtigungen</string>
 </resources>
