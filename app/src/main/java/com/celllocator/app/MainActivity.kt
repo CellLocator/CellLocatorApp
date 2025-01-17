@@ -32,12 +32,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.celllocator.app.ui.theme.CellLocatorTheme
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -84,37 +86,13 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
     val navController = rememberNavController()
 
     val navItems = listOf(Screen.Cells, Screen.Settings)
-    var showPermissionDialog by remember { mutableStateOf(false) }
     var permissionsGranted by remember { mutableStateOf(false) }
 
     CellLocatorTheme {
         LaunchedEffect(Unit) {
             permissionsGranted = checkAndRequestPermissions()
-            showPermissionDialog = !permissionsGranted
         }
 
-        if (showPermissionDialog) {
-            AlertDialog(
-                onDismissRequest = {},
-                title = { Text(text = stringResource(R.string.permission_required)) },
-                text = { Text(text = stringResource(R.string.permission_required_text)) },
-                confirmButton = {
-                    TextButton(onClick = {
-                        permissionsGranted = checkAndRequestPermissions()
-                        showPermissionDialog = !permissionsGranted
-                    }) {
-                        Text(text = stringResource(R.string.grant_permissions))
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = {
-                        showPermissionDialog = false
-                    }) {
-                        Text(text = stringResource(R.string.cancel))
-                    }
-                }
-            )
-        }
 
         if (permissionsGranted) {
             Scaffold(
@@ -184,24 +162,22 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
                 },
             )
         } else {
-            CellLocatorTheme {
-                Scaffold { padding ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(stringResource(R.string.permission_required))
-                            Button(onClick = {
-                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                val uri = Uri.fromParts("package", context.packageName, null)
-                                intent.data = uri
-                                context.startActivity(intent)
-                            }) {
-                                Text(stringResource(R.string.open_settings))
-                            }
+            Scaffold { padding ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(stringResource(R.string.permission_required))
+                        Button(onClick = {
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            val uri = Uri.fromParts("package", context.packageName, null)
+                            intent.data = uri
+                            context.startActivity(intent)
+                        }) {
+                            Text(stringResource(R.string.open_settings))
                         }
                     }
                 }
