@@ -62,6 +62,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val permissionsGranted = checkAndRequestPermissions()
+        if (permissionsGranted) {
+            setContent {
+                MainActivityContent(
+                    checkAndRequestPermissions = { checkAndRequestPermissions() }
+                )
+            }
+        }
+    }
+
+
     private fun checkAndRequestPermissions(): Boolean {
         val permissions = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
