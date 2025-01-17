@@ -48,7 +48,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.celllocator.app.ui.composables.LoadingSpinner
 import com.celllocator.app.ui.theme.CellLocatorTheme
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -107,6 +109,7 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val navController = rememberNavController()
 
+    val isLoading = remember { mutableStateOf(true) }
     val navItems = listOf(Screen.Cells, Screen.Settings)
     var permissionsGranted by remember { mutableStateOf(false) }
 
@@ -115,8 +118,18 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
             permissionsGranted = checkAndRequestPermissions()
         }
 
+        LaunchedEffect(Unit) {
+            isLoading.value = true
+            permissionsGranted = checkAndRequestPermissions()
+            isLoading.value = false
+        }
 
-        if (permissionsGranted) {
+        if (isLoading.value) {
+
+            CellLocatorTheme {
+                LoadingSpinner()
+            }
+        } else if (permissionsGranted) {
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
