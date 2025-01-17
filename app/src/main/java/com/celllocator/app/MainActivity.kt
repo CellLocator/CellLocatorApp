@@ -50,7 +50,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.celllocator.app.ui.composables.LoadingSpinner
 import com.celllocator.app.ui.theme.CellLocatorTheme
-import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -125,10 +124,7 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
         }
 
         if (isLoading.value) {
-
-            CellLocatorTheme {
-                LoadingSpinner()
-            }
+            LoadingSpinner()
         } else if (permissionsGranted) {
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
