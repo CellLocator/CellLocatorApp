@@ -1,6 +1,6 @@
 package com.celllocator.app.ui.composables
 
-import Screen
+import com.celllocator.app.util.Screen
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
