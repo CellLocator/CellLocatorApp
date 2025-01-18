@@ -34,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -44,7 +43,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.celllocator.app.ui.composables.ApplicationBar
+import com.celllocator.app.ui.composables.CLNavigationBar
 import com.celllocator.app.ui.composables.LoadingSpinner
+import com.celllocator.app.ui.composables.PermissionRequired
 import com.celllocator.app.ui.theme.CellLocatorTheme
 import com.celllocator.app.util.checkAndRequestPermissions
 
@@ -73,11 +75,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
-    data object Cells : Screen("cellinfo", R.string.menu_cells, Icons.Rounded.CellTower)
-
-    data object Settings : Screen("settings", R.string.menu_settings, Icons.Rounded.Settings)
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,21 +104,7 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                stringResource(R.string.app_name),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        },
-                        scrollBehavior = scrollBehavior,
-                        colors = topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                            scrolledContainerColor = MaterialTheme.colorScheme.primary,
-                        ),
-                    )
+                    ApplicationBar(scrollBehavior)
                 },
                 content = { padding ->
                     Surface(
@@ -142,73 +125,17 @@ fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
                     }
                 },
                 bottomBar = {
-                    NavigationBar {
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentDestination = navBackStackEntry?.destination
-
-                        navItems.forEach { screen ->
-                            NavigationBarItem(
-                                icon = {
-                                    Icon(
-                                        screen.icon,
-                                        contentDescription = stringResource(id = screen.resourceId)
-                                    )
-                                },
-                                label = { Text(stringResource(id = screen.resourceId)) },
-                                selected =
-                                currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                                onClick = {
-                                    if (currentDestination?.route != screen.route) {
-                                        navController.navigate(screen.route) {
-                                            popUpTo(navController.graph.startDestinationId)
-                                            launchSingleTop = true
-                                        }
-                                    }
-                                },
-                            )
-                        }
-                    }
+                    CLNavigationBar(navItems, navController)
                 },
             )
         } else {
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                stringResource(R.string.app_name),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        },
-                        scrollBehavior = scrollBehavior,
-                        colors = topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                            scrolledContainerColor = MaterialTheme.colorScheme.primary,
-                        ),
-                    )
+                    ApplicationBar(scrollBehavior)
                 },
                 content = { padding ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(stringResource(R.string.permission_required))
-                            Button(onClick = {
-                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                val uri = Uri.fromParts("package", context.packageName, null)
-                                intent.data = uri
-                                context.startActivity(intent)
-                            }) {
-                                Text(stringResource(R.string.open_settings))
-                            }
-                        }
-                    }
+                    PermissionRequired(padding, context)
                 }
             )
         }
