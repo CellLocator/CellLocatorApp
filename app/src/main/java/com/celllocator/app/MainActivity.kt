@@ -50,6 +50,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.celllocator.app.ui.composables.LoadingSpinner
 import com.celllocator.app.ui.theme.CellLocatorTheme
+import com.celllocator.app.util.checkAndRequestPermissions
 
 class MainActivity : ComponentActivity() {
 
@@ -58,40 +59,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MainActivityContent(
-                checkAndRequestPermissions = { checkAndRequestPermissions() }
+                checkAndRequestPermissions = { checkAndRequestPermissions(this, this) }
             )
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val permissionsGranted = checkAndRequestPermissions()
+        val permissionsGranted = checkAndRequestPermissions(this, this)
         if (permissionsGranted) {
             setContent {
                 MainActivityContent(
-                    checkAndRequestPermissions = { checkAndRequestPermissions() }
+                    checkAndRequestPermissions = { checkAndRequestPermissions(this, this) }
                 )
             }
         }
-    }
-
-
-    private fun checkAndRequestPermissions(): Boolean {
-        val permissions = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.READ_PHONE_STATE
-        )
-
-        val notGranted = permissions.filter {
-            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-        }
-
-        if (notGranted.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, notGranted.toTypedArray(), 0)
-        }
-
-        return notGranted.isEmpty()
     }
 }
 
