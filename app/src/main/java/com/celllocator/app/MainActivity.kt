@@ -12,10 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -28,56 +26,58 @@ import com.celllocator.app.ui.composables.LoadingSpinner
 import com.celllocator.app.ui.composables.PermissionRequired
 import com.celllocator.app.ui.theme.CellLocatorTheme
 import com.celllocator.app.util.Screen
-import com.celllocator.app.util.checkAndRequestPermissions
+import com.celllocator.app.util.checkPermissions
+import com.celllocator.app.util.requestPermissions
 
 class MainActivity : ComponentActivity() {
+
+    private var permissionsGranted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        permissionsGranted = checkPermissions(this)
         setContent {
-            MainActivityContent(
-                checkAndRequestPermissions = { checkAndRequestPermissions(this, this) }
-            )
+            MainActivityContent(permissionsGranted)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val permissionsGranted = checkAndRequestPermissions(this, this)
-        if (permissionsGranted) {
-            setContent {
-                MainActivityContent(
-                    checkAndRequestPermissions = { checkAndRequestPermissions(this, this) }
-                )
+
+        val currentPermissionsGranted = checkPermissions(this)
+
+        if (currentPermissionsGranted != permissionsGranted) {
+            permissionsGranted = currentPermissionsGranted
+
+            runOnUiThread {
+                setContent {
+                    MainActivityContent(permissionsGranted)
+                }
             }
         }
     }
 }
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainActivityContent(checkAndRequestPermissions: () -> Boolean) {
+fun MainActivityContent(permissionsGranted: Boolean) {
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val navController = rememberNavController()
 
-    val isLoading = remember { mutableStateOf(true) }
+    val isLoading = remember { mutableStateOf(false) }
     val navItems = listOf(Screen.Cells, Screen.Settings)
-    var permissionsGranted by remember { mutableStateOf(false) }
+
+    LaunchedEffect(permissionsGranted) {
+        if (!permissionsGranted) {
+            requestPermissions(context as MainActivity)
+        }
+    }
 
     CellLocatorTheme {
-        LaunchedEffect(Unit) {
-            permissionsGranted = checkAndRequestPermissions()
-        }
-
-        LaunchedEffect(Unit) {
-            isLoading.value = true
-            permissionsGranted = checkAndRequestPermissions()
-            isLoading.value = false
-        }
-
         if (isLoading.value) {
             LoadingSpinner()
         } else if (permissionsGranted) {
