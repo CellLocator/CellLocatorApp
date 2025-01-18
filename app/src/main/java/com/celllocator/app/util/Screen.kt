@@ -1,3 +1,5 @@
+package com.celllocator.app.util
+
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CellTower
