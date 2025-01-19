@@ -1,7 +1,6 @@
 package com.celllocator.app.ui.composables
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,12 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CellTower
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,11 +19,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.celllocator.app.entities.CellDetails
+import com.celllocator.app.entities.Cell
 import com.celllocator.app.util.getNodeName
 
 @Composable
-fun CellDetailsCard(cellDetails: CellDetails) {
+fun CellDetailsCard(cellDetails: Cell) {
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.background(MaterialTheme.colorScheme.surface)
@@ -43,7 +38,7 @@ fun CellDetailsCard(cellDetails: CellDetails) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "${getNodeName(cellDetails.networkType)} ${cellDetails.cellNr ?: "???"}:${cellDetails.sectorId} - ${cellDetails.networkType}",
+                    text = "${getNodeName(cellDetails.networkType)} ${cellDetails.getEnbNumber() ?: "???"}:${cellDetails.getSector()} - ${cellDetails.networkType}",
                     color = getFontColor(true),
                     fontSize = 16.sp
                 )
@@ -52,14 +47,9 @@ fun CellDetailsCard(cellDetails: CellDetails) {
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = "-101 dBm",
+                        text = "${cellDetails.rsrp} dBm",
                         color = getFontColor(true),
                         fontSize = 16.sp
-                    )
-                    Icon(
-                        imageVector = Icons.Rounded.CellTower,
-                        contentDescription = "Cell Tower",
-                        tint = getFontColor(true),
                     )
                 }
             }
@@ -82,8 +72,15 @@ fun CellDetailsCard(cellDetails: CellDetails) {
             Column(
                 verticalArrangement = Arrangement.spacedBy((-5).dp)
             ) {
-                InfoRow(label = "RSRQ", value = "${cellDetails.rsrq} dB")
-                InfoRow(label = "SINR", value = "${cellDetails.sinr} dB")
+                if (cellDetails.pci != null) {
+                    InfoRow(label = "PCI", value = cellDetails.pci.toString())
+                }
+                if (cellDetails.rsrq != null) {
+                    InfoRow(label = "RSRQ", value = "${cellDetails.rsrq} dB")
+                }
+                if (cellDetails.sinr != null) {
+                    InfoRow(label = "SINR", value = "${cellDetails.sinr} dB")
+                }
                 InfoRow(label = "RX Frequency", value = "${cellDetails.rxFrequency} MHz")
                 InfoRow(label = "TX Frequency", value = "${cellDetails.txFrequency} MHz")
                 if (cellDetails.pci != null) {
