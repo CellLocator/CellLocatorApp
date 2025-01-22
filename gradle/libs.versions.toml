@@ -33,6 +33,7 @@ ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose-ui" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose-ui" }
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+eventbus = { module = "org.greenrobot:eventbus", version = "3.3.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
