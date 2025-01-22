@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 fun getBuildNumber(): Int {
@@ -26,9 +27,7 @@ fun getBuildNumber(): Int {
 android {
     namespace = "com.celllocator.app"
     compileSdk = 35
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
+
 
     buildFeatures {
         compose = true

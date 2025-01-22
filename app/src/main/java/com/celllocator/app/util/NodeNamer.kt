@@ -1,6 +1,7 @@
 package com.celllocator.app.util
 
 import cz.mroczis.netmonster.core.db.model.NetworkType
+import java.util.Locale
 
 val networkTypes = mapOf(
     NetworkType.Gsm::class to "Cell",
@@ -25,5 +26,5 @@ fun getNodeName(networkType: NetworkType): String {
 
 fun getNodeName(networkType: String): String {
     // ignore case of networkType
-    return nodeNames[networkType.toUpperCase()] ?: "Unknown"
+    return nodeNames[networkType.uppercase(Locale.getDefault())] ?: "Unknown"
 }
